@@ -19,5 +19,5 @@ urlpatterns = patterns('',
     # url(r'^admin/', include(admin.site.urls)),
     url(r'^$', direct_to_template, {'template' : 'website/index.html'}),
     url(r'^w/', include('website.urls')),
-    url(r'^l/', include('log.urls')),
+    url(r'^log/', 'log.views.save_log'),
 )
