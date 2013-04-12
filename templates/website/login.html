@@ -1,0 +1,18 @@
+{% extends "website/base.html" %}
+{% block header %}
+    Login
+{% endblock %}
+{% block body %}
+<h1>
+    Login
+</h1>
+
+<div id = "login">
+    Enter Username
+    <input type="text" name="username" /><br>
+    Enter Password
+    <input type="password" name="password" /><br>
+    <input type="submit" value="Login" name="submit" class="submit" />
+    <li><a href="/w/forgot/">Forget password?</a></li>
+</div>
+{% endblock %}

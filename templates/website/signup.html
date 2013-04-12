@@ -1,0 +1,24 @@
+{% extends "website/base.html" %}
+{% block header %}
+    Login
+{% endblock %}
+{% block body %}
+<h1>
+    Sign Up
+</h1>
+
+<div id = "login">
+    First Name<br>
+    <input type="text" name="firstname" /><br>
+    Last Name<br>
+    <input type="text" name="lastname" /><br>
+    Email<br>
+    <input type="text" name="email" /><br>
+    Username<br>
+    <input type="text" name="username" /><br>
+    Password<br>
+    <input type="text" name="password" /><br>
+    <input type="submit" value="Login" name="submit" class="submit"/>
+</div>
+
+{% endblock %}
