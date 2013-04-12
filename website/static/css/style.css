@@ -53,17 +53,40 @@ h1 {
     text-align: center;
 }
 
-input[type="text"] {
-   text-align: left;
-   clear:both;
-   width: 30%;
+table {
+    font-family: 'Calibri', sans-serif;
+    background-color: #FFE9FF;
+    color: #C785CD;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-right: 50px;
+    margin-left: 50px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    font-size: 25px;
+    text-align: center;
+    vertical-align: middle;
+    margin: auto;
 }
 
-input[type="submit"] {
+td {
+   text-align: left;
+   clear:both;
+   width: 50%;
+}
+
+input[name="submit"] {
    text-align: center;
    margin-top: 10px;
    clear:both;
    width: 8%;
+}
+
+input[value="Retrieve password"] {
+   text-align: center;
+   margin-top: 10px;
+   clear:both;
+   width: 12%;
 }
 
 body {
@@ -88,6 +111,12 @@ li {
     display: inline;
     font-family: 'Patrick Hand SC', cursive;
     font-size: 26px;
+}
+
+li2 {
+    display: inline;
+    font-family: 'Calibri', sans-serif;
+    font-size: 15px;
 }
 
 a:hover {

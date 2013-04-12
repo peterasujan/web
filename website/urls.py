@@ -8,4 +8,5 @@ urlpatterns = patterns('',
     url(r'^login/$', direct_to_template, {'template' : 'website/login.html'}),
     url(r'^forgot/$', direct_to_template, {'template' : 'website/forgot.html'}),
     url(r'^signup/$', direct_to_template, {'template' : 'website/signup.html'}),
+    url(r'^forgot/$', direct_to_template, {'template' : 'website/forgot.html'}),
 )

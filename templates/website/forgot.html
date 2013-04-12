@@ -1,15 +1,19 @@
 {% extends "website/base.html" %}
-{% block header %}
-    Login
-{% endblock %}
+
 {% block body %}
 <h1>
     Forgot password?
 </h1>
 
 <div id = "login">
-    Email<br>
-    <input type="text" name="email" /><br>
-    <input type="submit" value="Login" name="submit" class="submit"/>
+	<table>
+		<tr>
+		<td>Email</td>
+		<td><input type="text" name="email" /><br></td>
+		</tr>
+		<tr>
+	</table>
+	<input type="submit" value="Retrieve password" name="submit" class="submit"/>
 </div>
+
 {% endblock %}
