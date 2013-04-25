@@ -1,0 +1,11 @@
+<head>
+	<base href="http://eduride.berkeley.edu/mvle/" />
+	<script type="text/javascript" src="scripts/jquery-1.9.1.min.js"></script>
+	<script type="text/javascript" src="scripts/multiplechoice.js"></script>
+	<link rel="stylesheet" type="text/css" href="css/mvle.css" />
+
+	<!--  include if you will have java code to syntax highlight -->
+	<script type="text/javascript" src="scripts/rainbow-custom.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="scripts/java-code.css" />
+
+</head>

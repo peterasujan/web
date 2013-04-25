@@ -1,0 +1,46 @@
+<!-- TODO:
+- make sure <div id="centeredDiv" class="bg7"> gets added via python when page built -- it doesn't belong here because isn't part of a multiple choice element, but rather the whole page
+-->
+
+<div class="MultipleChoice">
+	<div class="questionCountBox bg8">
+		<div class="questionTable">
+			<div class="questionType color1">
+				Multiple Choice
+			</div>
+		</div>
+	</div>
+	<!-- end of questionCountBox -->
+	<div class="currentQuestionBox">
+		<div class="leftColumn" class="bg8">
+			<div class="promptDiv"></div>
+			<div class="radiobuttondiv"></div>
+			<div class="feedbackdiv"></div>
+		</div>
+		<div class="rightColumn" class="bg2">
+			<img src="images/multi_choice.png" alt="Robot Art Open Response"  border="0" />
+		</div>
+	</div>
+	<div class="clearBoth"></div>
+	<div ="interactionBox">
+		<div class="statusMessages">
+			<div class="numberAttemptsDiv"></div>
+			<div class="scoreDiv"></div>
+			<div class="resultMessageDiv" style="font-size:16px"></div>
+		</div>
+		<!-- Anchor-Based Button Layout using TABLE -->
+		<div class="buttonDiv">
+			<table class="buttonTable">
+				<tr>
+					<td>
+					<div class="buttonDiv ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">
+						<a class="disabledLink" class="checkAnswerButton" href="#" onclick="mc.checkAnswer();">Check Answer</a>
+					</div></td><td>
+					<div class="buttonDiv ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">
+						<a class="tryAgainButton" class="disabledLink" href="#" onclick="mc.tryAgain();">Try Again</a>
+					</div></td>
+				</tr>
+			</table>
+		</div>
+	</div>
+</div>
