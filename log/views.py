@@ -9,13 +9,15 @@ def save_log(request):
     status = {'status': "failure"}
     if request.method == 'POST':
         try:
-            import pdb;pdb.set_trace()
-            subject = request.POST['subject']
-            verb = request.POST['verb']
-            object = request.POST['object']
+            log_items = request.POST['logs']
+            for log_item in log_items:
+                subject = User.objects.get(username=log_item['subject'])
+                verb = Verb.objects.get(verb=log_item['verb'])
+                object = log_item['object']
+                aLog = ActivityLog(subject=subject, verb=verb, object=object)
+                aLog.save()
             
             status['status'] = "success"
-            status['message'] = subject + " " + verb + " " + object
 
         except KeyError as e:
             status['message'] = "Missing arguments"
