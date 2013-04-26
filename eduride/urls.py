@@ -1,5 +1,5 @@
 from django.conf.urls import patterns, include, url
-from django.views.generic.simple import direct_to_template
+from django.views.generic import TemplateView
 import website
 
 
@@ -17,7 +17,7 @@ urlpatterns = patterns('',
 
     # Uncomment the next line to enable the admin:
     # url(r'^admin/', include(admin.site.urls)),
-    url(r'^$', direct_to_template, {'template' : 'website/index.html'}),
+    url(r'^$', TemplateView.as_view(template_name='website/index.html')),
     url(r'^w/', include('website.urls')),
     url(r'^log/', 'log.views.save_log'),
     url(r'^auth/', include('auth.urls')),
