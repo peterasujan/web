@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 
 class BlobField(models.Field):
     description = "Blob"
-    def db_type(self):
+    def db_type(self, connection):
         return 'blob'
 
 class Verb(models.Model):
