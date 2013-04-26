@@ -1,0 +1,24 @@
+{% extends "website/base.html" %}
+    
+{% block body %}
+<h1>
+    Login
+</h1>
+
+<div id = "login">
+    <li2><a href="/w/signup/">Don't have an account?</a></li2><br>
+    <table>
+    <tr>
+    <td>Username</td>
+    <td><input type="text" name="username" /><br></td>
+    </tr>
+    <tr>
+    <td>Password</td>
+    <td><input type="text" name="password" /><br></td>
+    </tr>
+    </table>
+    <li2><a href="/w/forgot/">Forget password?</a></li2><br>
+    <input type="submit" value="Login" name="submit" class="submit"/><br>
+</div>
+
+{% endblock %}
