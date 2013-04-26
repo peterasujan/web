@@ -9,7 +9,7 @@ def save_log(request):
     status = {'status': "failure"}
     if request.method == 'POST':
         try:
-            log_items = request.POST['logs']
+            log_items = request.POST.getlist('logs', [])
             for log_item in log_items:
                 subject = User.objects.get(username=log_item['subject'])
                 verb = Verb.objects.get(verb=log_item['verb'])
