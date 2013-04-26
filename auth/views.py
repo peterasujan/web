@@ -5,11 +5,10 @@ from django.utils import simplejson
 def auth_user(request):
     status = {'status': "failure"}
     try:
-        username = request.GET`['u']
+        username = request.GET['u']
         password = request.GET['p']
 
         user = User.objects.get(username=username)
-        if
         
 
 
