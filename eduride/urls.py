@@ -20,4 +20,5 @@ urlpatterns = patterns('',
     url(r'^$', direct_to_template, {'template' : 'website/index.html'}),
     url(r'^w/', include('website.urls')),
     url(r'^log/', 'log.views.save_log'),
+    url(r'^auth/', include('auth.urls')),
 )
