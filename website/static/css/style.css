@@ -38,6 +38,22 @@ h1 {
     font-size: 25px;
 }
 
+#centerText {
+    font-family: 'Patrick Hand SC', cursive;
+    background-color: #FFE9FF;
+    color: #C785CD;
+    border: 1px dotted #0094ff;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-right: 50px;
+    margin-left: 50px;
+    padding-top: 5px;
+    padding-left: 10px;
+    padding-bottom: 5px;
+    font-size: 25px;
+    text-align: center;
+}
+
 #login {
     font-family: 'Calibri', sans-serif;
     background-color: #FFE9FF;
