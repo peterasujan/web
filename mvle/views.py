@@ -11,4 +11,5 @@ def process_mvle(request):
 
     else:
         status['message'] = "Bad HTTP request type: Use POST instead"
+    return render_to_response('mvle/single-mc.html', {'data': 'hi'})
     return HttpResponse(simplejson.dumps(status), mimetype="application/json")

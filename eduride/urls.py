@@ -19,6 +19,7 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
     url(r'^$', TemplateView.as_view(template_name='website/index.html')),
     url(r'^w/', include('website.urls')),
-    url(r'^log/', 'log.views.save_log'),
+    url(r'^log/$', 'log.views.save_log'),
     url(r'^auth/', include('auth.urls')),
+    url(r'^mvle/$', 'mvle.views.process_mvle'),
 )
