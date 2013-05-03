@@ -1,0 +1,16 @@
+{% extends 'mvle/base.html' %}
+
+{% block head %}
+        <script type="text/javascript" src="{% static "scripts/multiplechoice.js" %}"></script>
+{% endblock %}
+
+{% block body %}
+<div display="none">
+    {{ data }}
+</div>
+<div id="centeredDiv" class="bg7">
+{% include 'mc-single-template.body' %}
+</div>
+{% endblock %}
+
+
