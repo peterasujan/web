@@ -1,7 +1,7 @@
 <!-- TODO:
 - make sure <div id="centeredDiv" class="bg7"> gets added via python when page built -- it doesn't belong here because isn't part of a multiple choice element, but rather the whole page
 -->
-
+{% load staticfiles %}
 <div class="MultipleChoice">
 	<div class="questionCountBox bg8">
 		<div class="questionTable">
@@ -18,7 +18,7 @@
 			<div class="feedbackdiv"></div>
 		</div>
 		<div class="rightColumn" class="bg2">
-			<img src="images/multi_choice.png" alt="Robot Art Open Response"  border="0" />
+			<img src="{% static 'images/multi_choice.png' %}" alt="Robot Art Open Response"  border="0" />
 		</div>
 	</div>
 	<div class="clearBoth"></div>

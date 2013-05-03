@@ -3,12 +3,12 @@ from django.views.generic import TemplateView
 
 
 urlpatterns = patterns('',
-    url(r'^about/$', direct_to_template, {'template' : 'website/about.html'}),
-    url(r'^browse/$', direct_to_template, {'template' : 'website/browse.html'}),
-    url(r'^login/$', direct_to_template, {'template' : 'website/login.html'}),
-    url(r'^forgot/$', direct_to_template, {'template' : 'website/forgot.html'}),
-    url(r'^signup/$', direct_to_template, {'template' : 'website/signup.html'}),
-    url(r'^forgot/$', direct_to_template, {'template' : 'website/forgot.html'}),
-    url(r'^newAccount/$', direct_to_template, {'template' : 'website/newAccount.html'}),
-    url(r'^retrieve/$', direct_to_template, {'template' : 'website/retrieve.html'}),
+    url(r'^about/$',  TemplateView.as_view(template_name='website/about.html')),
+    url(r'^browse/$', TemplateView.as_view(template_name='website/browse.html')),
+    url(r'^login/$',  TemplateView.as_view(template_name='website/login.html')),
+    url(r'^forgot/$', TemplateView.as_view(template_name='website/forgot.html')),
+    url(r'^signup/$', TemplateView.as_view(template_name='website/signup.html')),
+    url(r'^forgot/$', TemplateView.as_view(template_name='website/forgot.html')),
+    url(r'^newAccount/$', TemplateView.as_view(template_name='website/newAccount.html')),
+    url(r'^retrieve/$', TemplateView.as_view(template_name='website/retrieve.html')),
 )
