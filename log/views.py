@@ -15,7 +15,8 @@ def save_log(request):
             for log_item in log_items:
                 verb = Verb.objects.get(verb=log_item['verb'])
                 object = log_item['object']
-                aLog = ActivityLog(subject=w_id, verb=verb, object=object)
+                time = log_item['time']
+                aLog = ActivityLog(subject=w_id, verb=verb, object=object, time=time)
                 aLog.save()
             
             status['status'] = "success"

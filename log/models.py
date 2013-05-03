@@ -13,4 +13,5 @@ class ActivityLog(models.Model):
     subject = models.CharField(max_length=36)
     verb = models.ForeignKey(Verb)
     object = BlobField()
+    time = models.DateTimeField()
 
