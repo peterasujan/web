@@ -10,7 +10,8 @@ class Verb(models.Model):
     verb = models.CharField(max_length=30)
 
 class ActivityLog(models.Model):
-    subject = models.ForeignKey(User)
+    subject = models.CharField(max_length=36)
     verb = models.ForeignKey(Verb)
     object = BlobField()
+    time = models.DateTimeField()
 
