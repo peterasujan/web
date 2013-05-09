@@ -22,4 +22,5 @@ urlpatterns = patterns('',
     url(r'^log/$', 'log.views.save_log'),
     url(r'^auth/', include('auth.urls')),
     url(r'^mvle/$', 'mvle.views.process_mvle'),
+    url(r'^assignment/$', 'assignment.views.assignment_list'),
 )

@@ -130,6 +130,7 @@ INSTALLED_APPS = (
     'website',
     'mvle',
     'log',
+    'assignment',
 )
 
 # A sample logging configuration. The only tangible logging
