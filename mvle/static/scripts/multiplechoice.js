@@ -1,4 +1,3 @@
-"use strict";
 var mc;
 $(document).ready(function() {
 	mc = new MC();
