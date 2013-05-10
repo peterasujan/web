@@ -34,10 +34,10 @@
 				<tr>
 					<td>
 					<div class="buttonDiv ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">
-						<a class="disabledLink" class="checkAnswerButton" href="#" onclick="mc.checkAnswer();">Check Answer</a>
+						<a class="checkAnswerButton" onclick="mc.checkAnswer(); return false;">Check Answer</a>
 					</div></td><td>
 					<div class="buttonDiv ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">
-						<a class="tryAgainButton" class="disabledLink" href="#" onclick="mc.tryAgain();">Try Again</a>
+						<a class="tryAgainButton" onclick="mc.tryAgain(); return false;">Try Again</a>
 					</div></td>
 				</tr>
 			</table>
