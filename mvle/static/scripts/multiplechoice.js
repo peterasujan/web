@@ -298,7 +298,7 @@ MC.prototype.checkAnswer = function() {
 
 		if (checked) {
 			if (choice) {
-				$('.MultipleChoice .feedback_' + choiceIdentifier).html(choice.feedback);
+				$('.MultipleChoice #feedback_' + choiceIdentifier).html(choice.feedback);
 
 				var choiceTextDiv = $(".choicetext:" + choiceIdentifier);
 				if (this.isCorrect(choice.identifier)) {
