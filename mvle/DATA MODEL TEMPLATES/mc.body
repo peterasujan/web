@@ -1,10 +1,10 @@
+<div class="title">
+			Multiple Choice
+		</div>
 <div class="MultipleChoiceData" >
 	<div class="interaction" identifier="mc1"
 	hasinlinefeedback="true" maxchoices="1"
 	responseIdentifier="resp" shuffle="false" >
-		<div class="title">
-			Multiple Choice
-		</div>
 		<div class="prompt">
 			<p>
 				prompt
