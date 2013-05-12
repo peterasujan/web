@@ -6,12 +6,12 @@ class BlobField(models.Field):
     def db_type(self, connection):
         return 'blob'
 
-class Verb(models.Model):
-    verb = models.CharField(max_length=30)
+#class Verb(models.Model):
+#    verb = models.CharField(max_length=30)
 
 class ActivityLog(models.Model):
     subject = models.CharField(max_length=36)
-    verb = models.ForeignKey(Verb)
+    verb = models.CharField(max_length=256) #models.ForeignKey(Verb)
     object = BlobField()
-    time = models.DateTimeField()
+    time = models.DateTimeField() #models.DateTimeField()
 
