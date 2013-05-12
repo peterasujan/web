@@ -5,4 +5,4 @@ class LogAdmin(admin.ModelAdmin):
     list_display = ('subject', 'verb', 'time')
 
 
-admin.site.register(LogAdmin, ActivityLog)
+admin.site.register(ActivityLog, LogAdmin)
