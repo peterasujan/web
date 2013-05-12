@@ -1,4 +1,3 @@
-"use strict";
 var mc;
 $(document).ready(function() {
 	mc = new MC();
@@ -112,7 +111,7 @@ MC.prototype.render = function() {
 	$('.promptDiv').html(this.content.prompt);
 
 	/* remove buttons */
-	var radiobuttondiv = document.getElementById('radiobuttondiv');
+	var radiobuttondiv = $('.radiobuttondiv')[0];
 	while (radiobuttondiv.hasChildNodes()) {
 		radiobuttondiv.removeChild(radiobuttondiv.firstChild);
 	}
@@ -134,7 +133,16 @@ MC.prototype.render = function() {
 
 	/* render the choices */
 	for ( i = 0; i < this.choices.length; i++) {
-		choiceHTML = '<table><tbody><tr><td><input type="' + type + '" name="radiobutton" id="' + this.removeSpace(this.choices[i].identifier) + '" value="' + this.removeSpace(this.choices[i].identifier) + '" class="' + type + '"/></td><td><div id="choicetext:' + this.removeSpace(this.choices[i].identifier) + '">' + this.choices[i].text + '</div></td><td><div id="feedback_' + this.removeSpace(this.choices[i].identifier) + '" name="feedbacks"></div></td></tr></tbody></table>';
+		choiceHTML = '<table><tbody><tr><td>' + 
+                     '<input type="' + type + 
+                     '" name="radiobutton"' +
+                     ' id="' + this.removeSpace(this.choices[i].identifier) + 
+                     '" value="' + this.removeSpace(this.choices[i].identifier) + 
+                     '" class="' + type + '"/></td><td>' + 
+                         '<div id="choicetext:' + this.removeSpace(this.choices[i].identifier) + '">'
+                            + this.choices[i].text + 
+                            '</div></td><td><div id="feedback_' + this.removeSpace(this.choices[i].identifier) +
+                    '" name="feedbacks"></div></td></tr></tbody></table>';
 
 		$('.MultipleChoice .radiobuttondiv').append(choiceHTML);
 		
@@ -154,8 +162,8 @@ MC.prototype.render = function() {
 		// if there is no correct answer to this question (ie, when they're filling out a form),
 		// change button to say "save answer" and "edit answer" instead of "check answer" and "try again"
 		// and don't show the number of attempts.
-		document.getElementById("checkAnswerButton").innerHTML = "Save Answer";
-		document.getElementById("tryAgainButton").innerHTML = "Edit Answer";
+		$(".checkAnswerButton").innerHTML = "Save Answer";
+		$(".tryAgainButton").innerHTML = "Edit Answer";
 	} else {
 		displayNumberAttempts("This is your", "attempt", this.attempts);
 	};
@@ -265,8 +273,7 @@ MC.prototype.checkAnswer = function() {
 
 	this.attempts.push(null);
 
-	var radiobuttondiv = document.getElementById('radiobuttondiv');
-	var inputbuttons = radiobuttondiv.getElementsByTagName('input');
+	var inputbuttons = $('.radiobuttondiv')[0].getElementsByTagName('input');
 	var mcState = {};
 	var isCorrect = true;
 	var i, checked, choiceIdentifier, choice;
@@ -291,13 +298,13 @@ MC.prototype.checkAnswer = function() {
 
 		if (checked) {
 			if (choice) {
-				$('.MultipleChoice .feedback_' + choiceIdentifier).html(choice.feedback);
+				$('.MultipleChoice #feedback_' + choiceIdentifier).html(choice.feedback);
 
-				var choiceTextDiv = document.getElementById("choicetext:" + choiceIdentifier);
+				var choiceTextDiv = $(".choicetext:" + choiceIdentifier);
 				if (this.isCorrect(choice.identifier)) {
-					choiceTextDiv.setAttribute("class", "correct");
+					choiceTextDiv.attr("class", "correct");
 				} else {
-					choiceTextDiv.setAttribute("class", "incorrect");
+					choiceTextDiv.attr("class", "incorrect");
 					isCorrect = false;
 				}
 
@@ -428,7 +435,7 @@ function enableRadioButtons(doEnable) {
  */
 function clearFeedbackDiv() {
 	var z;
-	var feedbackdiv = document.getElementById('feedbackdiv');
+	var feedbackdiv = $('.feedbackdiv');
 	feedbackdiv.innerHTML = "";
 
 	var feedbacks = document.getElementsByName('feedbacks');

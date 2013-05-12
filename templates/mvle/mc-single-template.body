@@ -1,7 +1,7 @@
 <!-- TODO:
 - make sure <div id="centeredDiv" class="bg7"> gets added via python when page built -- it doesn't belong here because isn't part of a multiple choice element, but rather the whole page
 -->
-
+{% load staticfiles %}
 <div class="MultipleChoice">
 	<div class="questionCountBox bg8">
 		<div class="questionTable">
@@ -18,7 +18,7 @@
 			<div class="feedbackdiv"></div>
 		</div>
 		<div class="rightColumn" class="bg2">
-			<img src="images/multi_choice.png" alt="Robot Art Open Response"  border="0" />
+			<img src="{% static 'images/multi_choice.png' %}" alt="Robot Art Open Response"  border="0" />
 		</div>
 	</div>
 	<div class="clearBoth"></div>
@@ -34,10 +34,10 @@
 				<tr>
 					<td>
 					<div class="buttonDiv ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">
-						<a class="disabledLink" class="checkAnswerButton" href="#" onclick="mc.checkAnswer();">Check Answer</a>
+						<a class="checkAnswerButton" onclick="mc.checkAnswer(); return false;">Check Answer</a>
 					</div></td><td>
 					<div class="buttonDiv ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">
-						<a class="tryAgainButton" class="disabledLink" href="#" onclick="mc.tryAgain();">Try Again</a>
+						<a class="tryAgainButton" onclick="mc.tryAgain(); return false;">Try Again</a>
 					</div></td>
 				</tr>
 			</table>
