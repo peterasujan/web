@@ -1,23 +1,34 @@
 var mc;
 $(document).ready(function() {
-	mc = new MC();
-	mc.loadContent();
-	mc.render();
-	mc.postRender();
-
+	fetchData();
+	setTimeout(function() {
+		var questions = $(".interaction").length;
+		for (var i = 0; i < questions; i++) {
+			mc = new MC(i);
+			setTimeout(function() {
+				$("#centeredDiv").append(currentQuestionHTML);
+				mc.loadContent();
+				mc.render();
+				mc.postRender();
+			}, 300);
+		}
+	}, 300);
 });
 
 	// TODO: make this work with more than one <div class="interaction"> on the page!
 	// that is page with several MC questions.  Changes need to happen in lots of places -
 	// instead of constraining by .MultipleChoice , make an id for each of these and 
 
-function MC() {
+function MC(questionNumber) {
 	this.content = {};
 	this.properties = {};
 	this.correctResponse = [];
 	this.choices = [];
 	this.attempts = [];
 	this.states = [];
+	this.file = "";
+	this.num = questionNumber;
+	this.interaction = $($(".interaction")[this.num]);
 
 	//boolean to prevent shuffling after each answer submit
 	this.previouslyRendered = false;
@@ -30,7 +41,7 @@ MC.prototype.loadContent = function() {
 	// within the callback function
 	var choices = this.choices;
 	var i;
-	$('.choice').each(function() {
+	this.interaction.find('.choice').each(function() {
 		var elem = $(this);
 		var choice = {
 			identifier : elem.attr('identifier'),
@@ -42,11 +53,11 @@ MC.prototype.loadContent = function() {
 
 	// get user interaction information
 	this.content.prompt = $('.prompt').html();
-	this.properties.shuffle = $('.interaction').attr('shuffle');
-	this.properties.maxChoices = $('.interaction').attr('maxchoices');
+	this.properties.shuffle = (this.interaction.attr('shuffle') == "true");
+	this.properties.maxChoices = this.interaction.attr('maxchoices');
 
 	// get the list of correct responses
-	var corrResponses = $('.correctResponse');
+	var corrResponses = this.interaction.find('.correctResponse');
 
 	for ( i = 0; i !== corrResponses.length; i++) {
 		this.correctResponse.push($(corrResponses[i]).attr('identifier'));
@@ -73,12 +84,12 @@ MC.prototype.getChoiceByIdentifier = function(identifier) {
 function displayNumberAttempts(part1, part2, states) {
 	var nextAttemptNum = states.length + 1;
 	var nextAttemptString = "";
-	if (nextAttemptNum == 1) {
-		nextAttemptString = "1st";
-	} else if (nextAttemptNum == 2) {
-		nextAttemptString = "2nd";
-	} else if (nextAttemptNum == 3) {
-		nextAttemptString = "3rd";
+	if (nextAttemptNum % 10 == 1) {
+		nextAttemptString = nextAttemptNum + "st";
+	} else if (nextAttemptNum % 10 == 2) {
+		nextAttemptString = nextAttemptNum + "nd";
+	} else if (nextAttemptNum % 10 == 3) {
+		nextAttemptString = nextAttemptNum + "rd";
 	} else {
 		nextAttemptString = nextAttemptNum + "th";
 	}
@@ -89,7 +100,7 @@ MC.prototype.tryAgain = function(e) {
 	if ($(".MultipleChoice .tryAgainButton").hasClass("disabledLink")) {
 		return;
 	}
-	mc.render();
+	this.render();
 };
 
 /**
@@ -361,12 +372,12 @@ MC.prototype.enforceMaxChoices = function(inputs) {
 
 		if (countChecked > maxChoices) {
 			//this.node.view.notificationManager.notify('You have selected too many. Please select only ' + maxChoices + ' choices.',3);
-			maxChoices = 3;
+			//maxChoices = 3;
 			alert('You have selected too many. Please select only ' + maxChoices + ' choices.');
 			return false;
 		} else if (countChecked < maxChoices) {
 			//this.node.view.notificationManager.notify('You have not selected enough. Please select ' + maxChoices + ' choices.',3);
-			maxChoices = 3;
+			//maxChoices = 3;
 			alert('You have not selected enough. Please select ' + maxChoices + ' choices.');
 			return false;
 		}
@@ -454,3 +465,86 @@ MC.prototype.postRender = function() {
 	$(".MultipleChoice .questionType").html(thetitle);
 
 }
+
+/**
+* Fetches data from file specified in URL and inserts it in the question-data div.
+*/
+var fetchData = function() {
+	var file = "/mvle/DATA MODEL TEMPLATES/" + getParameterByName("quiz");
+	$.ajax({
+		url : file,
+		type : "GET",
+		dataType : "text",
+		cache : false,
+		success : store
+	});
+}
+
+/**
+* Stores the data in the div.
+*/
+var store = function(data, unused1, unused2) {
+	$(".question-data").html(data);
+}
+
+/**
+* Will eventually not reside here.
+*/
+getParameterByName = function(name) {
+  name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+  var regexS = "[\\?&]" + name + "=([^&#]*)";
+  var regex = new RegExp(regexS);
+  var results = regex.exec(window.location.search);
+  if(results == null)
+    return "";
+  else
+    return decodeURIComponent(results[1].replace(/\+/g, " "));
+}
+
+var currentQuestionHTML = 
+				"<!-- from mc-single-template.body -->\
+				<div class='MultipleChoice'>\
+					<div class='questionCountBox bg8'>\
+						<div class='questionTable'>\
+							<div class='questionType color1'>\
+								Multiple Choice\
+							</div>\
+						</div>\
+					</div>\
+					<!-- end of questionCountBox -->\
+				\
+					<div class='currentQuestionBox'>\
+						<div class='leftColumn' class='bg8'>\
+							<div class='promptDiv'></div>\
+							<div class='radiobuttondiv'></div>\
+							<div class='feedbackdiv'></div>\
+						</div>\
+						<div class='rightColumn' class='bg2'>\
+							<img src='images/multi_choice.png' alt='Robot Art Open Response'  border='0' />\
+						</div>\
+					</div>\
+					<div class='clearBoth'></div>\
+					<div ='interactionBox'>\
+						<div class='statusMessages'>\
+							<div class='numberAttemptsDiv'></div>\
+							<div class='scoreDiv'></div>\
+							<div class='resultMessageDiv' style='font-size:16px'></div>\
+						</div>\
+						<!-- Anchor-Based Button Layout using TABLE -->\
+						<div class='buttonDiv'>\
+							<table class='buttonTable'>\
+								<tr>\
+									<td>\
+									<div class='buttonDiv ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only'>\
+										<a class='checkAnswerButton' onclick='mc.checkAnswer(); return false;'>Check Answer</a>\
+									</div></td><td>\
+									<div class='buttonDiv ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only'>\
+										<a class='tryAgainButton' onclick='mc.tryAgain(); return false;'>Try Again</a>\
+									</div></td>\
+								</tr>\
+							</table>\
+						</div>\
+					</div>\
+				</div>";
+				
+
