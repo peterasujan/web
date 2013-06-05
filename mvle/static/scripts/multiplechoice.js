@@ -1,16 +1,16 @@
-var mc;
+var mc = [];
 $(document).ready(function() {
 	fetchData();
 	setTimeout(function() {
 		var questions = $(".interaction").length;
 		for (var i = 0; i < questions; i++) {
-			mc = new MC(i);
-			setTimeout(function() {
-				$("#centeredDiv").append(currentQuestionHTML);
-				mc.loadContent();
-				mc.render();
-				mc.postRender();
-			}, 300);
+			mc.push(new MC(i));
+			$("#centeredDiv").append(currentQuestionHTML);
+			//setTimeout(function() {
+				mc[i].loadContent();
+				mc[i].render();
+				mc[i].postRender();
+			//}, 300);
 		}
 	}, 300);
 });
@@ -29,6 +29,8 @@ function MC(questionNumber) {
 	this.file = "";
 	this.num = questionNumber;
 	this.interaction = $($(".interaction")[this.num]);
+	this.responseDec = $($(".responseDeclaration")[this.num]);
+	this.multipleChoice;
 
 	//boolean to prevent shuffling after each answer submit
 	this.previouslyRendered = false;
@@ -39,6 +41,7 @@ MC.prototype.loadContent = function() {
 
 	// copy a reference to the instance variable array to use
 	// within the callback function
+	this.multipleChoice = $($(".MultipleChoice")[this.num]);
 	var choices = this.choices;
 	var i;
 	this.interaction.find('.choice').each(function() {
@@ -52,12 +55,12 @@ MC.prototype.loadContent = function() {
 	});
 
 	// get user interaction information
-	this.content.prompt = $('.prompt').html();
+	this.content.prompt = this.interaction.find('.prompt').html();
 	this.properties.shuffle = (this.interaction.attr('shuffle') == "true");
 	this.properties.maxChoices = this.interaction.attr('maxchoices');
 
 	// get the list of correct responses
-	var corrResponses = this.interaction.find('.correctResponse');
+	var corrResponses = this.responseDec.find('.correctResponse');
 
 	for ( i = 0; i !== corrResponses.length; i++) {
 		this.correctResponse.push($(corrResponses[i]).attr('identifier'));
@@ -73,7 +76,7 @@ MC.prototype.loadContent = function() {
 //gets and returns a choice object given the choice's identifier
 MC.prototype.getChoiceByIdentifier = function(identifier) {
 	var i;
-	for ( i = 0; i < this.choices.length; i++) {
+	for (i = 0; i < this.choices.length; i++) {
 		if (this.removeSpace(this.choices[i].identifier) == identifier) {
 			return this.choices[i];
 		}
@@ -81,7 +84,7 @@ MC.prototype.getChoiceByIdentifier = function(identifier) {
 	return null;
 };
 
-function displayNumberAttempts(part1, part2, states) {
+MC.prototype.displayNumberAttempts = function(part1, part2, states) {
 	var nextAttemptNum = states.length + 1;
 	var nextAttemptString = "";
 	if (nextAttemptNum % 10 == 1) {
@@ -93,11 +96,11 @@ function displayNumberAttempts(part1, part2, states) {
 	} else {
 		nextAttemptString = nextAttemptNum + "th";
 	}
-	$('.MultipleChoice .numberAttemptsDiv').html(part1 + " " + nextAttemptString + " " + part2 + ".");
+	this.multipleChoice.find('.numberAttemptsDiv').html(part1 + " " + nextAttemptString + " " + part2 + ".");
 };
 
 MC.prototype.tryAgain = function(e) {
-	if ($(".MultipleChoice .tryAgainButton").hasClass("disabledLink")) {
+	if (this.multipleChoice.find(".tryAgainButton").hasClass("disabledLink")) {
 		return;
 	}
 	this.render();
@@ -114,15 +117,15 @@ MC.prototype.render = function() {
 		//$('.MultipleChoice').html(pageTemplate);
 
 		/* set the question type title */
-		$('.MultipleChoice .questionType').html('Multiple Choice');
+		this.multipleChoice.find('.questionType').html('Multiple Choice');
 	}
 
 	/* render the prompt 
 	 */
-	$('.promptDiv').html(this.content.prompt);
+	this.multipleChoice.find('.promptDiv').html(this.content.prompt);
 
 	/* remove buttons */
-	var radiobuttondiv = $('.radiobuttondiv')[0];
+	var radiobuttondiv = this.multipleChoice.find('.radiobuttondiv')[0];
 	while (radiobuttondiv.hasChildNodes()) {
 		radiobuttondiv.removeChild(radiobuttondiv.firstChild);
 	}
@@ -155,28 +158,38 @@ MC.prototype.render = function() {
                             '</div></td><td><div id="feedback_' + this.removeSpace(this.choices[i].identifier) +
                     '" name="feedbacks"></div></td></tr></tbody></table>';
 
-		$('.MultipleChoice .radiobuttondiv').append(choiceHTML);
+		this.multipleChoice.find('.radiobuttondiv').append(choiceHTML);
 		
 		// TODO -- what are these doing?  need to move from id's to classes eventually...
-		$('#' + this.removeSpace(this.choices[i].identifier)).click(function() {
-			enableCheckAnswerButton('true');
+		// Peter: I think this is actually okay
+		$('#' + this.removeSpace(this.choices[i].identifier)).bind('click', {myQuestion: this}, function(args) {
+			args.data.myQuestion.enableCheckAnswerButton('true');
 		});
 		if (this.selectedInSavedState(this.choices[i].identifier)) {
 			$('#' + this.removeSpace(this.choices[i].identifier)).attr('checked', true);
 		}
+		
+		this.multipleChoice.find(".checkAnswerButton").bind('click', {myQuestion: this}, function(args) {
+			args.data.myQuestion.checkAnswer();
+		});
+		
+		this.multipleChoice.find(".tryAgainButton").bind('click', {myQuestion: this}, function(args) {
+			args.data.myQuestion.tryAgain();
+		});
 	}
 
-	$('.MultipleChoice .tryAgainButton').addClass('disabledLink');
-	clearFeedbackDiv();
+	this.multipleChoice.find('.tryAgainButton').addClass('disabledLink');
+	this.enableCheckAnswerButton('true'); // should this be here??? TODO
+	this.clearFeedbackDiv();
 
 	if (this.correctResponse.length < 1) {
 		// if there is no correct answer to this question (ie, when they're filling out a form),
 		// change button to say "save answer" and "edit answer" instead of "check answer" and "try again"
 		// and don't show the number of attempts.
-		$(".checkAnswerButton").innerHTML = "Save Answer";
-		$(".tryAgainButton").innerHTML = "Edit Answer";
+		this.multipleChoice.find(".checkAnswerButton").innerHTML = "Save Answer";
+		this.multipleChoice.find(".tryAgainButton").innerHTML = "Edit Answer";
 	} else {
-		displayNumberAttempts("This is your", "attempt", this.attempts);
+		this.displayNumberAttempts("This is your", "attempt", this.attempts);
 	};
 
 	if (this.states.length > 0) {
@@ -184,9 +197,9 @@ MC.prototype.render = function() {
 		var latestState = this.states[this.states.length - 1];
 		//display the message that they correctly answered the question
 		var resultMessage = this.getResultMessage(latestState.isCorrect);
-		$('.MultipleChoice .resultMessageDiv').html(resultMessage);
+		this.multipleChoice.find('.resultMessageDiv').html(resultMessage);
 		if (latestState.isCorrect) {
-			$('.MultipleChoice .tryAgainButton').addClass('disabledLink');
+			this.multipleChoice.find('.tryAgainButton').addClass('disabledLink');
 		}
 
 	}
@@ -275,43 +288,42 @@ MC.prototype.isCorrect = function(id) {
  * Disables "Check Answer" button and enables "Try Again" button
  */
 MC.prototype.checkAnswer = function() {
-	if ($('.MultipleChoice .checkAnswerButton').hasClass('disabledLink')) {
+	if (this.multipleChoice.find('.checkAnswerButton').hasClass('disabledLink')) {
 		return;
 	}
 
 	//clear the previous result message
-	$('.MultipleChoice .resultMessageDiv').html('');
+	this.multipleChoice.find('.resultMessageDiv').html('');
 
 	this.attempts.push(null);
 
-	var inputbuttons = $('.radiobuttondiv')[0].getElementsByTagName('input');
+	var inputbuttons = this.multipleChoice.find('.radiobuttondiv')[0].getElementsByTagName('input');
 	var mcState = {};
 	var isCorrect = true;
 	var i, checked, choiceIdentifier, choice;
 
+	/*
 	if (!this.enforceMaxChoices(inputbuttons)) {
 		return;
-	}
+	}*/
 
-	enableRadioButtons(false);
+	this.enableRadioButtons(false);
 	// disable radiobuttons
-	$('.MultipleChoice .checkAnswerButton').addClass('disabledLink');
+	this.multipleChoice.find('.checkAnswerButton').addClass('disabledLink');
 	// disable checkAnswerButton
-	$('.MultipleChoice .tryAgainButton').removeClass('disabledLink');
+	this.multipleChoice.find('.tryAgainButton').removeClass('disabledLink');
 	// show try again button
-
 	for ( i = 0; i < inputbuttons.length; i++) {
 		checked = inputbuttons[i].checked;
 		choiceIdentifier = inputbuttons[i].getAttribute('id');
 		// identifier of the choice that was selected
 		// use the identifier to get the correctness and feedback
 		choice = this.getChoiceByIdentifier(choiceIdentifier);
-
 		if (checked) {
 			if (choice) {
-				$('.MultipleChoice #feedback_' + choiceIdentifier).html(choice.feedback);
+				this.multipleChoice.find('#feedback_' + choiceIdentifier).html(choice.feedback);
 
-				var choiceTextDiv = $(".choicetext:" + choiceIdentifier);
+				var choiceTextDiv = this.multipleChoice.find(".choicetext:" + choiceIdentifier);
 				if (this.isCorrect(choice.identifier)) {
 					choiceTextDiv.attr("class", "correct");
 				} else {
@@ -340,8 +352,8 @@ MC.prototype.checkAnswer = function() {
 		//the student answered correctly
 
 		//get the congratulations message and display it
-		$('.MultipleChoice .resultMessageDiv').html(this.getResultMessage(isCorrect));
-		$('.MultipleChoice .checkAnswerButton').addClass('disabledLink');
+		this.multipleChoice.find('.resultMessageDiv').html(this.getResultMessage(isCorrect));
+		this.multipleChoice.find('.checkAnswerButton').addClass('disabledLink');
 		// disable checkAnswerButton
 
 	}
@@ -416,12 +428,12 @@ MC.prototype.removeSpace = function(text) {
  * OR
  * disable checkAnswerButton
  */
-function enableCheckAnswerButton(doEnable) {
+MC.prototype.enableCheckAnswerButton = function(doEnable) {
 	if (doEnable == 'true') {
-		$('.MultipleChoice .checkAnswerButton').removeClass('disabledLink');
+		this.multipleChoice.find('.checkAnswerButton').removeClass('disabledLink');
 		// disable checkAnswerButton
 	} else {
-		$('.MultipleChoice .tryAgainButton').addClass('disabledLink');
+		this.multipleChoice.find('.tryAgainButton').addClass('disabledLink');
 		// disable checkAnswerButton
 	}
 }
@@ -429,9 +441,9 @@ function enableCheckAnswerButton(doEnable) {
 /**
  * Enables radiobuttons so that user can click on them
  */
-function enableRadioButtons(doEnable) {
+MC.prototype.enableRadioButtons = function(doEnable) {
 	var i;
-	var radiobuttons = document.getElementsByName('radiobutton');
+	var radiobuttons = this.multipleChoice.find('[name="radiobutton"]');
 	for ( i = 0; i < radiobuttons.length; i++) {
 		if (doEnable == 'true') {
 			radiobuttons[i].removeAttribute('disabled');
@@ -444,12 +456,12 @@ function enableRadioButtons(doEnable) {
 /**
  * Clears HTML inside feedbackdiv
  */
-function clearFeedbackDiv() {
+MC.prototype.clearFeedbackDiv = function() {
 	var z;
-	var feedbackdiv = $('.feedbackdiv');
+	var feedbackdiv = this.multipleChoice.find('.feedbackdiv');
 	feedbackdiv.innerHTML = "";
 
-	var feedbacks = document.getElementsByName('feedbacks');
+	var feedbacks = this.multipleChoice.find('[name="feedbacks"]');
 	for ( z = 0; z < feedbacks.length; z++) {
 		feedbacks[z].innerHTML = "";
 	}
@@ -462,7 +474,7 @@ MC.prototype.postRender = function() {
 	$('head').prepend('<meta http-equiv="content-type" content="text/html; charset=UTF-8">');
 
 	var thetitle = document.title;
-	$(".MultipleChoice .questionType").html(thetitle);
+	this.multipleChoice.find(".questionType").html(thetitle);
 
 }
 
@@ -536,10 +548,10 @@ var currentQuestionHTML =
 								<tr>\
 									<td>\
 									<div class='buttonDiv ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only'>\
-										<a class='checkAnswerButton' onclick='mc.checkAnswer(); return false;'>Check Answer</a>\
+										<a class='checkAnswerButton'>Check Answer</a>\
 									</div></td><td>\
 									<div class='buttonDiv ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only'>\
-										<a class='tryAgainButton' onclick='mc.tryAgain(); return false;'>Try Again</a>\
+										<a class='tryAgainButton'>Try Again</a>\
 									</div></td>\
 								</tr>\
 							</table>\
